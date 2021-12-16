@@ -14,7 +14,7 @@ export default class DemoList extends BasicList {
     });
   }
 
-  public async loadItems(context: ListContext): Promise<ListItem[]> {
+  public async loadItems(_context: ListContext): Promise<ListItem[]> {
     return [
       {
         label: 'coc-mozc list item 1',
