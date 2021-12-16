@@ -1,17 +1,24 @@
-import { BasicList, ListAction, ListContext, ListItem, Neovim, window } from 'coc.nvim';
+import {
+  BasicList,
+  ListAction,
+  ListContext,
+  ListItem,
+  Neovim,
+  window,
+} from 'coc.nvim'
 
 export default class DemoList extends BasicList {
-  public readonly name = 'demo_list';
-  public readonly description = 'CocList for coc-mozc';
-  public readonly defaultAction = 'open';
-  public actions: ListAction[] = [];
+  public readonly name = 'demo_list'
+  public readonly description = 'CocList for coc-mozc'
+  public readonly defaultAction = 'open'
+  public actions: ListAction[] = []
 
   constructor(nvim: Neovim) {
-    super(nvim);
+    super(nvim)
 
     this.addAction('open', (item: ListItem) => {
-      window.showMessage(`${item.label}, ${item.data.name}`);
-    });
+      window.showMessage(`${item.label}, ${item.data.name}`)
+    })
   }
 
   public async loadItems(_context: ListContext): Promise<ListItem[]> {
@@ -24,6 +31,6 @@ export default class DemoList extends BasicList {
         label: 'coc-mozc list item 2',
         data: { name: 'list item 2' },
       },
-    ];
+    ]
   }
 }
