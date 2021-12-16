@@ -18,11 +18,6 @@
     "build": "node esbuild.js",
     "prepare": "node esbuild.js"
   },
-  "prettier": {
-    "singleQuote": true,
-    "printWidth": 120,
-    "semi": true
-  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
@@ -34,6 +29,11 @@
     "prettier": "^2.2.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.2"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120,
+    "semi": true
   },
   "activationEvents": [
     "*"
