@@ -23,12 +23,21 @@ export async function createPool(): Promise<PredictFn> {
       }
       function predict(query: string): Promise<string[]> {
         return new Promise((resolve) => {
-          ps.stdout.once('data', (d) => {
+          let page = 0
+          const handler = (d: any) => {
             // ps.stdin.write(`(${seq} SendKey ${seq} enter)\n`)
-            resolve(parseEmacsMozcHelperResponse(String(d)))
-          })
+            if (page === 3) {
+              ps.stdout.off('data', handler)
+              resolve(parseEmacsMozcHelperResponse(String(d)))
+            }
+            page++
+          }
+          ps.stdout.on('data', handler)
           // ps.stdin.write(`(${seq} SendKey 0 "${query}")\n`)
           ps.stdin.write(`(${seq} SendKey ${seq} "${query}")\n`)
+          ps.stdin.write(`(${seq} SendKey ${seq} down)\n`)
+          ps.stdin.write(`(${seq} SendKey ${seq} down)\n`)
+          ps.stdin.write(`(${seq} SendKey ${seq} down)\n`)
           seq++
         })
       }
