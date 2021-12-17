@@ -1,4 +1,5 @@
 import {
+  workspace,
   commands,
   ExtensionContext,
   Range,
@@ -18,6 +19,15 @@ export async function activate(context: ExtensionContext): Promise<void> {
     commands.registerCommand('coc-mozc.Command', async () => {
       window.showMessage(`coc-mozc Commands works!`)
     }),
+
+    workspace.registerKeymap(
+      ['n'],
+      'mozc-keymap',
+      async () => {
+        window.showMessage(`registerKeymap`)
+      },
+      { sync: false },
+    ),
 
     languages.registerCompletionItemProvider(
       'mozc',
@@ -61,7 +71,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
         },
       },
       TRIGGER_KEYS,
-      1000,
+      undefined,
       [],
     ),
   )

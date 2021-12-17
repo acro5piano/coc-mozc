@@ -24,11 +24,13 @@ export async function createPool(): Promise<PredictFn> {
       function predict(query: string): Promise<string[]> {
         return new Promise((resolve) => {
           let page = 0
+          const items: string[] = []
           const handler = (d: any) => {
-            // ps.stdin.write(`(${seq} SendKey ${seq} enter)\n`)
+            items.push(...parseEmacsMozcHelperResponse(String(d)))
             if (page === 3) {
               ps.stdout.off('data', handler)
-              resolve(parseEmacsMozcHelperResponse(String(d)))
+              ps.stdin.write(`(${seq} SendKey ${seq} enter)\n`)
+              resolve(items)
             }
             page++
           }

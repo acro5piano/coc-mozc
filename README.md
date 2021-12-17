@@ -8,7 +8,7 @@ mozc input method source for coc.nvim
 
 ## Keymaps
 
-`nmap <silent> <C-l> <Plug>(coc-coc-mozc-keymap)`
+`nmap <silent> <C-l> <Plug>(coc-mozc-keymap)`
 
 ## Lists
 
