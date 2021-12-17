@@ -6,6 +6,7 @@ import {
   languages,
   TextDocument,
   Position,
+  workspace,
 } from 'coc.nvim'
 import { alphabetToKana, TRIGGER_KEYS } from './alphabetToKana'
 import { createPool } from './mozc-cli'
@@ -15,30 +16,51 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   let enabled = false
 
+  async function enable() {
+    enabled = true
+    window.showMessage(`Mozc enabled!`)
+    const changeMapScripts = [
+      `inoremap <silent><expr> <space> pumvisible() ? \\"<C-n>\\" : \\"\<space>\\"`,
+      `inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : \\"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>\\"`,
+      `inoremap <silent><expr> <tab> pumvisible() ? \\"<C-n>\\" : \\"\<tab>\\"`,
+      `inoremap <silent><expr> <S-tab> pumvisible() ? \\"<C-p>\\" : \\"\<S-tab>\\"`,
+    ]
+    await Promise.all(
+      changeMapScripts.map((script) =>
+        workspace.nvim.eval(`execute("${script}")`),
+      ),
+    )
+  }
+
+  async function disable() {
+    enabled = false
+    window.showMessage(`Mozc disabled!`)
+    const restoreMapScripts = [
+      `inoremap <space> <space>`,
+      `inoremap <cr> <cr>`,
+      `inoremap <tab> <tab>`,
+      `inoremap <S-tab> <S-tab>`,
+    ]
+    await workspace.nvim.eval('')
+    await Promise.all(
+      restoreMapScripts.map((script) =>
+        workspace.nvim.eval(`execute("${script}")`),
+      ),
+    )
+  }
+
   context.subscriptions.push(
-    commands.registerCommand('mozc.enable', async () => {
-      enabled = true
-      window.showMessage(`Mozc enabled!`)
-    }),
+    commands.registerCommand('mozc.enable', enable),
 
-    commands.registerCommand('mozc.disable', async () => {
-      enabled = false
-      window.showMessage(`Mozc disabled!`)
-    }),
+    commands.registerCommand('mozc.disable', disable),
 
-    commands.registerCommand('mozc.toggle', async () => {
-      enabled = !enabled
-      window.showMessage(`Mozc ${enabled ? 'enabled' : 'disabled'}!`)
+    commands.registerCommand('mozc.toggle', () => {
+      if (enabled) {
+        disable()
+      } else {
+        enable()
+      }
     }),
-
-    // workspace.registerKeymap(
-    //   ['n'],
-    //   'mozc-keymap',
-    //   async () => {
-    //     window.showMessage(`registerKeymap`)
-    //   },
-    //   { sync: false },
-    // ),
 
     languages.registerCompletionItemProvider(
       'mozc',

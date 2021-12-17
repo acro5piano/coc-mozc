@@ -16,9 +16,7 @@ export function alphabetToKana(input: string, result = ''): string {
   return result
 }
 
-// const MOTHERS = ['a', 'i', 'u', 'e', 'o']
-
-export const TRIGGER_KEYS = 'abcdefghijklmnopqrstuvwxyz,.?!-'.split('')
+export const TRIGGER_KEYS = 'abcdefghijklmnopqrstuvwxyz,.?!-~'.split('')
 
 export const dictionary = {
   a: 'あ',
@@ -80,6 +78,7 @@ export const dictionary = {
   go: 'ご',
   za: 'ざ',
   zi: 'じ',
+  ji: 'じ',
   zu: 'ず',
   ze: 'ぜ',
   zo: 'ぞ',
