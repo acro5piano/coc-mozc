@@ -1,4 +1,5 @@
 ![image](https://user-images.githubusercontent.com/10719495/146516289-1a794449-fd61-4e68-8a60-5c70eb12980d.png)
+![image](https://user-images.githubusercontent.com/10719495/146517271-344c36dd-cf84-4707-abad-797bb859eebf.png)
 
 # coc-mozc
 
