@@ -20,6 +20,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - run: |
           yarn install
+          sudo cp misc/mock-mozc_emacs_helper.sh /usr/bin/mozc_emacs_helper
           yarn lint
           yarn tsc
           yarn test
