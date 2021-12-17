@@ -12,6 +12,7 @@
     "coc": "^0.0.80"
   },
   "scripts": {
+    "test": "ava",
     "lint": "eslint src --ext ts",
     "clean": "rimraf lib",
     "watch": "node esbuild.js --watch",
