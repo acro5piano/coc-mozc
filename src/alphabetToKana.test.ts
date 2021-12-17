@@ -12,4 +12,5 @@ test('alphabetToKana', async (t) => {
   t.is(alphabetToKana('kokkei'), 'こっけい')
   t.is(alphabetToKana('.'), '。')
   t.is(alphabetToKana(','), '、')
+  t.is(alphabetToKana('iketeru,toomou'), 'いけてる、とおもう')
 })

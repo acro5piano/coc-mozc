@@ -7,8 +7,7 @@ import {
   TextDocument,
   Position,
 } from 'coc.nvim'
-import { alphabetToKana } from './alphabetToKana'
-import { isLowerAlpha } from './isLowerAlpha'
+import { alphabetToKana, TRIGGER_KEYS } from './alphabetToKana'
 import { createPool } from './mozc-cli'
 
 export async function activate(context: ExtensionContext): Promise<void> {
@@ -40,7 +39,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
           let singleChar = getPrevSingleChar(offset)
           let inputString = ''
 
-          while (isLowerAlpha(singleChar) && offset !== 0) {
+          while (TRIGGER_KEYS.includes(singleChar) && offset !== 0) {
             inputString = singleChar + inputString
             offset -= 1
             singleChar = getPrevSingleChar(offset)
@@ -61,7 +60,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
           return items
         },
       },
-      [],
+      TRIGGER_KEYS,
       1000,
       [],
     ),

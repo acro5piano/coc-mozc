@@ -1,7 +1,10 @@
 export function alphabetToKana(input: string, result = ''): string {
   for (const len of [1, 2, 3]) {
-    if (map[input.slice(0, len)]) {
-      return alphabetToKana(input.slice(len), result + map[input.slice(0, len)])
+    if (dictionary[input.slice(0, len)]) {
+      return alphabetToKana(
+        input.slice(len),
+        result + dictionary[input.slice(0, len)],
+      )
     }
   }
   if (input[0] === 'n') {
@@ -15,7 +18,9 @@ export function alphabetToKana(input: string, result = ''): string {
 
 // const MOTHERS = ['a', 'i', 'u', 'e', 'o']
 
-const map = {
+export const TRIGGER_KEYS = 'abcdefghijklmnopqrstuvwxyz,.?!'.split('')
+
+export const dictionary = {
   a: 'あ',
   i: 'い',
   u: 'う',
@@ -26,6 +31,7 @@ const map = {
   ku: 'く',
   ke: 'け',
   ko: 'こ',
+  co: 'こ',
   sa: 'さ',
   si: 'し',
   shi: 'し',
@@ -166,6 +172,9 @@ const map = {
   pyu: 'ぴゅ',
   pyo: 'ぴょ',
   nn: 'ん',
+  '-': 'ー',
   '.': '。',
   ',': '、',
+  '?': '？',
+  '!': '！',
 } as any
