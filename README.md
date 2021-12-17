@@ -1,7 +1,6 @@
 [![release](https://github.com/acro5piano/coc-mozc/actions/workflows/release.yml/badge.svg)](https://github.com/acro5piano/coc-mozc/actions/workflows/release.yml)
 [![test](https://github.com/acro5piano/coc-mozc/actions/workflows/test.yml/badge.svg)](https://github.com/acro5piano/coc-mozc/actions/workflows/test.yml)
 
-
 # coc-mozc
 
 NeoVim の日本語入力を Mozc で出来るようにするプラグインです。 COC のサジェストのリストに表示されるようになります。
@@ -10,7 +9,6 @@ Mozc input method source for coc.nvim
 
 ![image](https://user-images.githubusercontent.com/10719495/146517271-344c36dd-cf84-4707-abad-797bb859eebf.png)
 ![image](https://user-images.githubusercontent.com/10719495/146516289-1a794449-fd61-4e68-8a60-5c70eb12980d.png)
-
 
 ## Why
 
@@ -61,6 +59,11 @@ nmap <silent> <Leader>z :CocCommand mozc.toggle<CR>
   - 大文字入力した時に候補が出なくて改行してしまうミスも引き起こす
 
 上記の問題はありつつ、まあ一旦動くから良しとしている。
+
+## Inspired By
+
+- https://github.com/tonyfettes/coc-rime/blob/master/src/index.ts
+- https://github.com/yasuyuky/SublimeMozcInput
 
 ## License
 
