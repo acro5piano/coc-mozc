@@ -159,6 +159,7 @@ export const dictionary = {
   ja: 'じゃ',
   jyu: 'じゅ',
   ju: 'じゅ',
+  je: 'じぇ',
   jyo: 'じょ',
   jo: 'じょ',
   dya: 'じゃ',

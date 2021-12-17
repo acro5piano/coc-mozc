@@ -11,6 +11,10 @@ import {
 import { alphabetToKana, TRIGGER_KEYS } from './alphabetToKana'
 import { createPool } from './mozc-cli'
 
+// 日本語を打てるようにするプラグインです。
+// この文章もcoc-mozc で書いてます.
+// zc で console.log になるようにしているので、 mozc と打つのが辛い。
+
 export async function activate(context: ExtensionContext): Promise<void> {
   const predict = await createPool()
 
@@ -41,7 +45,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
       `inoremap <tab> <tab>`,
       `inoremap <S-tab> <S-tab>`,
     ]
-    await workspace.nvim.eval('')
     await Promise.all(
       restoreMapScripts.map((script) =>
         workspace.nvim.eval(`execute("${script}")`),
@@ -107,7 +110,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
         },
       },
       TRIGGER_KEYS,
-      10000,
+      10000, // Maybe user does not use both Japanese input and normal input
       [],
     ),
   )
