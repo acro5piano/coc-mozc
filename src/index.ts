@@ -23,8 +23,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
   async function enable() {
     enabled = true
     window.showMessage(`Mozc enabled!`)
+    // TODO: this is bad hack for those who set shortcuts to these keys
     const changeMapScripts = [
-      `inoremap <silent><expr> <space> pumvisible() ? \\"<C-n>\\" : \\"\<space>\\"`,
+      `inoremap <silent><expr> <space> pumvisible() ? \\"<C-n><C-n>\\" : \\"\<space>\\"`,
       `inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : \\"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>\\"`,
       `inoremap <silent><expr> <tab> pumvisible() ? \\"<C-n>\\" : \\"\<tab>\\"`,
       `inoremap <silent><expr> <S-tab> pumvisible() ? \\"<C-p>\\" : \\"\<S-tab>\\"`,

@@ -24,19 +24,22 @@ export async function createPool(): Promise<PredictFn> {
       function predict(query: string): Promise<string[]> {
         return new Promise((resolve) => {
           let page = 0
-          const items: string[] = []
+          const items: string[] = [query]
           const handler = (d: any) => {
-            parseEmacsMozcHelperResponse(String(d)).forEach((item, idx) => {
+            parseEmacsMozcHelperResponse(String(d)).forEach((item) => {
               // first word is useless, because same as Hiragana input
-              const isUselessFirstItem = idx === 0 && page === 0
-              if (!items.includes(item) && !isUselessFirstItem) {
+              if (!items.includes(item)) {
                 items.push(item)
               }
+              // const isUselessFirstItem = idx === 0 && page === 0
+              // if (!items.includes(item) && !isUselessFirstItem) {
+              //   items.push(item)
+              // }
             })
             if (page === 3) {
               ps.stdout.off('data', handler)
               ps.stdin.write(`(${seq} SendKey ${seq} enter)\n`)
-              resolve([...items, query]) // Save query for later use (direct Hiragana input)
+              resolve(items) // Save query for later use (direct Hiragana input)
             }
             page++
           }
