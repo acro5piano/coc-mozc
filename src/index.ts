@@ -1,5 +1,4 @@
 import {
-  workspace,
   commands,
   ExtensionContext,
   Range,
@@ -12,22 +11,34 @@ import { alphabetToKana, TRIGGER_KEYS } from './alphabetToKana'
 import { createPool } from './mozc-cli'
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  window.showMessage(`coc-mozc works!`)
   const predict = await createPool()
 
+  let enabled = false
+
   context.subscriptions.push(
-    commands.registerCommand('coc-mozc.Command', async () => {
-      window.showMessage(`coc-mozc Commands works!`)
+    commands.registerCommand('mozc.enable', async () => {
+      enabled = true
+      window.showMessage(`Mozc enabled!`)
     }),
 
-    workspace.registerKeymap(
-      ['n'],
-      'mozc-keymap',
-      async () => {
-        window.showMessage(`registerKeymap`)
-      },
-      { sync: false },
-    ),
+    commands.registerCommand('mozc.disable', async () => {
+      enabled = false
+      window.showMessage(`Mozc disabled!`)
+    }),
+
+    commands.registerCommand('mozc.toggle', async () => {
+      enabled = !enabled
+      window.showMessage(`Mozc ${enabled ? 'enabled' : 'disabled'}!`)
+    }),
+
+    // workspace.registerKeymap(
+    //   ['n'],
+    //   'mozc-keymap',
+    //   async () => {
+    //     window.showMessage(`registerKeymap`)
+    //   },
+    //   { sync: false },
+    // ),
 
     languages.registerCompletionItemProvider(
       'mozc',
@@ -38,6 +49,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
           document: TextDocument,
           position: Position,
         ) {
+          if (!enabled) {
+            return []
+          }
           let offset = document.offsetAt(position)
           const getPrevSingleChar = (offset: number): string => {
             return document.getText({
@@ -71,7 +85,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
         },
       },
       TRIGGER_KEYS,
-      undefined,
+      10000,
       [],
     ),
   )
