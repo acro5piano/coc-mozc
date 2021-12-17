@@ -1,62 +1,105 @@
 import {
   commands,
-  CompleteResult,
   ExtensionContext,
-  listManager,
-  sources,
   window,
-  workspace,
+  languages,
+  TextDocument,
+  Position,
 } from 'coc.nvim'
-import DemoList from './lists'
+import { createPool } from './mozc-cli'
 
 export async function activate(context: ExtensionContext): Promise<void> {
   window.showMessage(`coc-mozc works!`)
+  const predict = await createPool()
 
   context.subscriptions.push(
     commands.registerCommand('coc-mozc.Command', async () => {
       window.showMessage(`coc-mozc Commands works!`)
     }),
 
-    listManager.registerList(new DemoList(workspace.nvim)),
+    languages.registerCompletionItemProvider(
+      'mozc',
+      'Mozc',
+      null,
+      {
+        async provideCompletionItems(
+          document: TextDocument,
+          position: Position,
+        ) {
+          let offset = document.offsetAt(position)
+          const getPrevSingleChar = (offset: number): string => {
+            return document.getText({
+              start: document.positionAt(offset - 1),
+              end: document.positionAt(offset),
+            })
+          }
 
-    sources.createSource({
-      name: 'coc-mozc completion source', // unique id
-      doComplete: async () => {
-        const items = await getCompletionItems()
-        return items
-      },
-    }),
+          let singleChar = getPrevSingleChar(offset)
 
-    workspace.registerKeymap(
-      ['n'],
-      'mozc-keymap',
-      async () => {
-        window.showMessage(`registerKeymap`)
+          let inputString = ''
+
+          while (isLowerAlpha(singleChar) && offset != 0) {
+            inputString = singleChar + inputString
+            offset -= 1
+            singleChar = getPrevSingleChar(offset)
+          }
+
+          const items = await predict('いえす')
+          return items.map((item) => ({
+            label: item,
+            sortText: inputString,
+            filterText: inputString,
+          }))
+        },
       },
-      { sync: false },
+      [],
+      1000,
+      [],
     ),
 
-    workspace.registerAutocmd({
-      event: 'InsertLeave',
-      request: true,
-      callback: () => {
-        window.showMessage(`registerAutocmd on InsertLeave`)
-      },
-    }),
+    // workspace.registerKeymap(
+    //   ['n'],
+    //   'mozc-keymap',
+    //   async () => {
+    //     window.showMessage(`registerKeymap`)
+    //   },
+    //   { sync: false },
+    // ),
+    //
+    // workspace.registerAutocmd({
+    //   event: 'InsertLeave',
+    //   request: true,
+    //   callback: () => {
+    //     window.showMessage(`registerAutocmd on InsertLeave`)
+    //   },
+    // }),
   )
 }
 
-async function getCompletionItems(): Promise<CompleteResult> {
-  return {
-    items: [
-      {
-        word: 'TestCompletionItem 1',
-        menu: '[coc-mozc]',
-      },
-      {
-        word: 'TestCompletionItem 2',
-        menu: '[coc-mozc]',
-      },
-    ],
+// HUGE thanks to coc-rime
+// https://github.com/tonyfettes/coc-rime/blob/1f78456e56c4b17fc5de6d0d06f3a81bc829342d/src/ctype.ts#L23
+function _isAlpha(char: string): number {
+  if (char.length != 1) {
+    return 0
   }
+  const charCode = char.charCodeAt(0)
+  if (charCode >= 'A'.charCodeAt(0) && charCode <= 'Z'.charCodeAt(0)) {
+    return 1
+  } else if (charCode >= 'a'.charCodeAt(0) && charCode <= 'z'.charCodeAt(0)) {
+    return -1
+  } else {
+    return 0
+  }
+}
+
+export function isAlpha(char: string): boolean {
+  return (_isAlpha(char) != 0) as boolean
+}
+
+export function isLowerAlpha(char: string): boolean {
+  return _isAlpha(char) === -1
+}
+
+export function isUpperAlpha(char: string): boolean {
+  return _isAlpha(char) === 1
 }
