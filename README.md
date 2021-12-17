@@ -18,15 +18,17 @@ In terminal, it is hard to input Japanese with OS standard IME. With coc-mozc, y
 
 ## Install
 
-Prerequisite
+### Prerequisite
 
-- `mozc_emacs_helper` is required!
+`mozc_emacs_helper` is required!
 
 For ubuntu:
 
 ```
 sudo apt-get install emacs-mozc
 ```
+
+### Install coc-mozc via `CocInstall`
 
 ```
 :CocInstall coc-mozc
