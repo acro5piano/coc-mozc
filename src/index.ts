@@ -27,8 +27,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
     const changeMapScripts = [
       `inoremap <silent><expr> <space> pumvisible() ? \\"<C-n><C-n>\\" : \\"\<space>\\"`,
       `inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : \\"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>\\"`,
-      `inoremap <silent><expr> <tab> pumvisible() ? \\"<C-n>\\" : \\"\<tab>\\"`,
-      `inoremap <silent><expr> <S-tab> pumvisible() ? \\"<C-p>\\" : \\"\<S-tab>\\"`,
     ]
     await Promise.all(
       changeMapScripts.map((script) =>
@@ -40,12 +38,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   async function disable() {
     enabled = false
     window.showMessage(`Mozc disabled!`)
-    const restoreMapScripts = [
-      `inoremap <space> <space>`,
-      `inoremap <cr> <cr>`,
-      `inoremap <tab> <tab>`,
-      `inoremap <S-tab> <S-tab>`,
-    ]
+    const restoreMapScripts = [`inoremap <space> <space>`, `inoremap <cr> <cr>`]
     await Promise.all(
       restoreMapScripts.map((script) =>
         workspace.nvim.eval(`execute("${script}")`),
