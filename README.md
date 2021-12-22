@@ -35,8 +35,12 @@ sudo apt-get install emacs-mozc
 ## Example settings
 
 ```vim
-" Leader + z toggles mozc mode
-nmap <silent> <Leader>z :CocCommand mozc.toggle<CR>
+" C-j triggers mozc mode
+inoremap <expr> <C-j> execute(':CocCommand mozc.enable')
+
+" Disable mozc when insert leave
+au InsertLeave * execute(':CocCommand mozc.disable')
+
 ```
 
 # Known Issues
