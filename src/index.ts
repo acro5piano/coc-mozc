@@ -20,30 +20,20 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   let enabled = false
 
+  const settings = {
+    mozcPriority: Number(await workspace.nvim.getVar('mozc_priority')) || 10000,
+  }
+
   async function enable() {
     enabled = true
     window.showMessage(`Mozc enabled!`)
-    // TODO: this is bad hack for those who set shortcuts to these keys
-    const changeMapScripts = [
-      `inoremap <silent><expr> <space> pumvisible() ? \\"<C-n><C-n>\\" : \\"\<space>\\"`,
-      `inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : \\"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>\\"`,
-    ]
-    await Promise.all(
-      changeMapScripts.map((script) =>
-        workspace.nvim.eval(`execute("${script}")`),
-      ),
-    )
+    workspace.nvim.eval(`execute('doautocmd User MozcEnabled')`)
   }
 
   async function disable() {
     enabled = false
     window.showMessage(`Mozc disabled!`)
-    const restoreMapScripts = [`inoremap <space> <space>`, `inoremap <cr> <cr>`]
-    await Promise.all(
-      restoreMapScripts.map((script) =>
-        workspace.nvim.eval(`execute("${script}")`),
-      ),
-    )
+    workspace.nvim.eval(`execute('doautocmd User MozcDisabled')`)
   }
 
   context.subscriptions.push(
@@ -104,7 +94,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
         },
       },
       TRIGGER_KEYS,
-      10000, // Maybe user does not use both Japanese input and normal input
+      settings.mozcPriority, // Maybe user does not use both Japanese input and normal input
       [],
     ),
   )
