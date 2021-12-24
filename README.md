@@ -35,8 +35,12 @@ sudo apt-get install emacs-mozc
 ## Example settings
 
 ```vim
-" C-j triggers mozc mode
-inoremap <expr> <C-j> execute(':CocCommand mozc.enable')
+" Selects the first prediction by pressing Enter, meaning insert ひらがな
+autocmd User MozcEnabled execute('inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"')
+autocmd User MozcDisabled execute('inoremap <cr> <cr>')
+
+" C-j toggles mozc mode
+inoremap <expr> <C-j> execute(':CocCommand mozc.toggle')
 
 " Disable mozc when insert leave
 au InsertLeave * execute(':CocCommand mozc.disable')
