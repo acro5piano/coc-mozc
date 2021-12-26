@@ -1,6 +1,6 @@
 {
   "name": "coc-mozc",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "mozc input method source for coc.nvim",
   "author": "Kay Gosho <ketsume0211@gmail.com>",
   "license": "MIT",
